@@ -29,11 +29,15 @@ namespace Skclusive.Mobx.JsonSchema
 
         RegEx,
 
+        Guid,
+
         UUID,
 
         Alpha,
 
         AlphaNumeric,
+
+        Hexadecimal,
 
         Identifier,
 
@@ -53,14 +57,24 @@ namespace Skclusive.Mobx.JsonSchema
 
         Uppercase,
 
-        UTCMillisec
+        UTCMillisec,
+
+        Base64,
+
+        Integer,
+
+        Float,
+
+        Double,
+
+        Decimal
     }
 
     public interface IStringPrimitive
     {
-        int MinLength { set; get; }
+        int? MinLength { set; get; }
 
-        int MaxLength { set; get; }
+        int? MaxLength { set; get; }
 
         string Pattern { set; get; }
 
@@ -73,9 +87,14 @@ namespace Skclusive.Mobx.JsonSchema
 
     public class String : ValueSnapshot<string>, IString
     {
-        public int MinLength { set; get; }
+        public String()
+        {
+            Type = SchemaType.String;
+        }
 
-        public int MaxLength { set; get; }
+        public int? MinLength { set; get; }
+
+        public int? MaxLength { set; get; }
 
         public string Pattern { set; get; }
 

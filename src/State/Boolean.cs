@@ -13,5 +13,9 @@ namespace Skclusive.Mobx.JsonSchema
 
     public class Boolean : ValueSnapshot<bool>, IBoolean
     {
+        public Boolean()
+        {
+            Type = SchemaType.Boolean;
+        }
     }
 }

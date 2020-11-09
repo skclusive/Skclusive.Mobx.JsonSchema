@@ -13,9 +13,9 @@ namespace Skclusive.Mobx.JsonSchema.Tests
 
                Const = 10,
 
-               Enum = new double[] { 1, 3, 5 },
+               Enum = new double?[] { 1, 3, 5 },
 
-               Value = 6,
+               // Value = 6,
 
                Title = "sequence?",
 
@@ -30,7 +30,6 @@ namespace Skclusive.Mobx.JsonSchema.Tests
 
             Assert.Equal(10, sequence.Const);
 
-            Assert.Equal(6, sequence.Value);
 
             Assert.Equal(3, sequence.Enum.Count);
 
@@ -47,6 +46,20 @@ namespace Skclusive.Mobx.JsonSchema.Tests
             Assert.Equal(2, sequence.MultipleOf);
 
             Assert.Equal("sequence?", sequence.Title);
+
+            Assert.Null(sequence.Value);
+
+            sequence.SetData((double)6);
+
+            Assert.Equal(6, sequence.Value);
+
+            sequence.SetData((double)8);
+
+            Assert.Equal(8, sequence.Value);
+
+            sequence.Reset();
+
+            Assert.Null(sequence.Value);
         }
     }
 }

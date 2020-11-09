@@ -6,13 +6,13 @@ namespace Skclusive.Mobx.JsonSchema
 {
     public interface IArrayPrimitive
     {
-        int MinItems { set; get; }
+        int? MinItems { set; get; }
 
-        int MaxItems { set; get; }
+        int? MaxItems { set; get; }
 
-        bool UniqueItems { set; get; }
+        bool? UniqueItems { set; get; }
 
-        bool AdditionalItems { set; get; }
+        bool? AdditionalItems { set; get; }
     }
 
     public interface IArray : IAny, IArrayPrimitive
@@ -22,14 +22,19 @@ namespace Skclusive.Mobx.JsonSchema
 
     public class Array : Any, IArray
     {
+        public Array()
+        {
+            Type = SchemaType.Array;
+        }
+
         public IList<IAny> Items { set; get; }
 
-        public int MinItems { set; get; }
+        public int? MinItems { set; get; }
 
-        public int MaxItems { set; get; }
+        public int? MaxItems { set; get; }
 
-        public bool UniqueItems { set; get; }
+        public bool? UniqueItems { set; get; }
 
-        public bool AdditionalItems { set; get; }
+        public bool? AdditionalItems { set; get; }
     }
 }

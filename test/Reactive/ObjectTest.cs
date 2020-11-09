@@ -54,7 +54,7 @@ namespace Skclusive.Mobx.JsonSchema.Tests
 
                        Const = 10,
 
-                       Enum = new double[] { 1, 3, 5 },
+                       Enum = new double?[] { 1, 3, 5 },
 
                        Value = 6,
 

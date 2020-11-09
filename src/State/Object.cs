@@ -6,9 +6,9 @@ namespace Skclusive.Mobx.JsonSchema
 {
     public interface IObjectPrimitive
     {
-        int MinProperties { set; get; }
+        int? MinProperties { set; get; }
 
-        int MaxProperties { set; get; }
+        int? MaxProperties { set; get; }
     }
 
     public interface IObject : IAny, IObjectPrimitive
@@ -20,12 +20,17 @@ namespace Skclusive.Mobx.JsonSchema
 
     public class Object : Any, IObject
     {
+        public Object()
+        {
+            Type = SchemaType.Object;
+        }
+
         public IMap<string, IAny> Properties { set; get; }
 
         public string[] Required { set; get; }
 
-        public int MinProperties { set; get; }
+        public int? MinProperties { set; get; }
 
-        public int MaxProperties { set; get; }
+        public int? MaxProperties { set; get; }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Skclusive.Mobx.Observable;
 using Skclusive.Mobx.StateTree;
 
@@ -9,9 +10,7 @@ namespace Skclusive.Mobx.JsonSchema
     {
         void SetValue(V value);
 
-        void Reset();
-
-        void Validate();
+        IEnumerable<string> ValidateValue(V value);
     }
 
     public interface IValueObservable<V> : IAnyObservable, IValuePrimitive<V>, IValueActions<V>
@@ -50,14 +49,9 @@ namespace Skclusive.Mobx.JsonSchema
             (Target as dynamic).SetValue(value);
         }
 
-        public void Reset()
+        public IEnumerable<string> ValidateValue(V value)
         {
-            (Target as dynamic).Reset();
-        }
-
-        public void Validate()
-        {
-            (Target as dynamic).Validate();
+            return (Target as dynamic).ValidateValue(value);
         }
     }
 
@@ -69,6 +63,7 @@ namespace Skclusive.Mobx.JsonSchema
         ));
 
         public static IObjectType<VS, VO> CreateValueType<V, VS, VO>(
+            string name,
             SchemaType schemaType,
             Func<IObservableObject<VO, INode>, VO> proxify,
             Func<VS> snpashoty,
@@ -80,12 +75,43 @@ namespace Skclusive.Mobx.JsonSchema
             .Mutable(o => o.Enum, Types.Maybe(Types.List(valueType())))
             .Mutable(o => o.Value, Types.Maybe(valueType()))
             .View(o => o.Data, Types.Frozen, (o) => o.Value)
+            .View(o => o.Modified, Types.Boolean, (o) => !object.Equals(o.Initial, o.Data))
+            .View(o => o.Valid, Types.Boolean, (o) => o.Errors.Count == 0)
             .Action(o => o.Reset(), (o) =>
             {
-                 o.Value = default;
+                o.SetData(o.Initial);
+                o.Errors.Clear();
             })
-            .Action(o => o.Validate(), (o) =>
+            .Action<object, IEnumerable<string>>(o => o.ValidateData(default), (o, data) =>
             {
+                var errors = new List<string>();
+
+                if (data is V value)
+                {
+                    var typeErrors = valueType().Validate(value, System.Array.Empty<IContextEntry>());
+
+                    errors.AddRange(typeErrors.Select(typeError => typeError.Message));
+
+                    if (!object.Equals(o.Const, default) && !object.Equals(o.Const, value))
+                    {
+                        errors.Add($"should be equal to {o.Const}");
+                    }
+
+                    if (!object.Equals(o.Enum, default) && o.Enum.Count > 0 && !o.Enum.Contains(value))
+                    {
+                        errors.Add($"should be equal to one of the allowed values[{string.Join(" ,", o.Enum.Select(e => e.ToString()))}]");
+                    }
+
+                    var valueErrors = o.ValidateValue(value);
+
+                    errors.AddRange(valueErrors);
+                }
+                else
+                {
+                    errors.Add($"should be of type {name}");
+                }
+
+                return errors;
             })
             .Action<V>(o => o.SetValue(default), (o, value) =>
             {
@@ -93,9 +119,9 @@ namespace Skclusive.Mobx.JsonSchema
             })
             .Action<object>(o => o.SetData(default), (o, data) =>
             {
-                if (data is V value)
+                if (data is null || data is V)
                 {
-                    o.SetValue(value);
+                    o.Value = (V)data;
                 }
             })
             .Action<string>(o => o.SetTitle(default), (o, title) =>

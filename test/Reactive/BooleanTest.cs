@@ -24,8 +24,6 @@ namespace Skclusive.Mobx.JsonSchema.Tests
 
             Assert.True(agree.Const);
 
-            Assert.True(agree.Value);
-
             Assert.Equal(2, agree.Enum.Count);
 
             Assert.True(agree.Enum[0]);
@@ -33,6 +31,34 @@ namespace Skclusive.Mobx.JsonSchema.Tests
             Assert.False(agree.Enum[1]);
 
             Assert.Equal("agree?", agree.Title);
+
+            Assert.True(agree.Value);
+
+            Assert.False(agree.Modified);
+
+            agree.SetValue(false);
+
+            Assert.False(agree.Value);
+
+            Assert.True(agree.Modified);
+
+            agree.Validate();
+
+            Assert.False(agree.Valid);
+
+            Assert.Equal(1, agree.Errors.Count);
+
+            agree.Reset();
+
+            Assert.True(agree.Value);
+
+            Assert.False(agree.Modified);
+
+            agree.Validate();
+
+            Assert.True(agree.Valid);
+
+            Assert.Equal(0, agree.Errors.Count);
         }
     }
 }

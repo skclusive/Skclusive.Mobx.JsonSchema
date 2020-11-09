@@ -3,15 +3,22 @@ using System.Collections.Generic;
 
 namespace Skclusive.Mobx.JsonSchema
 {
-    public interface INullPrimitive
+    public interface INullPrimitive : IAnyPrimitive
+    {
+        object Value { set; get; }
+    }
+
+    public interface INull : IAny, INullPrimitive
     {
     }
 
-    public interface INull : IValue<object>, INullPrimitive
+    public class Null : Any, INull
     {
-    }
+        public Null()
+        {
+            Type = SchemaType.Null;
+        }
 
-    public class Null : ValueSnapshot<object>, INull
-    {
+        public object Value { set; get; }
     }
 }
