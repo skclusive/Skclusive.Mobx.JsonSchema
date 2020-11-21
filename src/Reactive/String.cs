@@ -53,7 +53,72 @@ namespace Skclusive.Mobx.JsonSchema
     {
         public readonly static IType<Format, Format> FormatType = Types.Late("LateFormat", () => Types.Enumeration
         (
-            Enum.GetValues<Format>()
+            new Format[]
+            {
+                Format.None,
+
+                Format.Date,
+
+                Format.DateTime,
+
+                Format.URL,
+
+                Format.URI,
+
+                Format.URIReference,
+
+                Format.URITemplate,
+
+                Format.Email,
+
+                Format.HostName,
+
+                Format.IPv4,
+
+                Format.IPv6,
+
+                Format.RegEx,
+
+                Format.Guid,
+
+                Format.UUID,
+
+                Format.Alpha,
+
+                Format.AlphaNumeric,
+
+                Format.Hexadecimal,
+
+                Format.Identifier,
+
+                Format.Numeric,
+
+                Format.Time,
+
+                Format.Color,
+
+                Format.Style,
+
+                Format.Phone,
+
+                Format.IPAddress,
+
+                Format.Lowecase,
+
+                Format.Uppercase,
+
+                Format.UTCMillisec,
+
+                Format.Base64,
+
+                Format.Integer,
+
+                Format.Float,
+
+                Format.Double,
+
+                Format.Decimal
+            }
         ));
 
         private readonly static IDictionary<Format, Func<string, bool>> Validators = new Dictionary<Format, Func<string, bool>>

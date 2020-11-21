@@ -59,7 +59,20 @@ namespace Skclusive.Mobx.JsonSchema
     {
         public readonly static IType<SchemaType, SchemaType> SchemaMobxType = Types.Late("LateSchemaType", () => Types.Enumeration
         (
-            Enum.GetValues<SchemaType>()
+            new SchemaType[]
+            {
+                SchemaType.Null,
+
+                SchemaType.Boolean,
+
+                SchemaType.String,
+
+                SchemaType.Number,
+
+                SchemaType.Object,
+
+                SchemaType.Array
+            }
         ));
 
         public static IObjectType<VS, VO> CreateValueType<V, VS, VO>(
